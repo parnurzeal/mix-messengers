@@ -10,23 +10,56 @@ Vue.config.productionTip = false;
 function created() {
   /* eslint-disable */
   window.fbAsyncInit = function () {
+    const appId = store.state.global.fb.appId;
+    const pageId = store.state.global.fb.pageId;
+    console.log(`appId: ${appId}, pageId: ${pageId}`);
     FB.init({
-      appId: '266788757017683',
+      appId,
       autoLogAppEvents: true,
       xfbml: true,
       version: 'v3.1',
     });
-    FB.api(
-      '/602939823441479',
-        'GET',
-        {"fields":"conversations{id}"},
-        function(response) {
-          console.log(response);
-                // Insert your code here
-        }
-    );
     FB.getLoginStatus(function(response) {
-      console.log(response);
+      
+      FB.login(function(response) {
+        console.log(response);
+        if (response.authResponse) {
+          FB.api('/me', function(meResp) {
+            console.log(meResp);
+            console.log('Good to see you, ' + meResp.name + '.');
+            const userToken = response.authResponse.accessToken;
+            FB.api(`${pageId}?fields=access_token&access_token=${userToken}`, function(pageResp) {
+              const pageToken = pageResp.access_token;
+              store.commit('setMe', { 
+                me: {
+                  fb: {
+                    userToken,
+                    pageToken,
+                  }
+                },
+              });
+              store.dispatch('getFbConversationList');
+            });
+          });
+        } else {
+          console.log('User cancelled login or did not fully authorize.');
+        }
+      }, {
+        scope: 'public_profile,email,manage_pages,pages_show_list,read_page_mailboxes', 
+        return_scopes: true
+      });
+      
+      /*if (response.status === 'connected') {
+        const userToken = response.authResponse.accessToken;
+        console.log(`userToken: ${userToken}`);
+        console.log('Connected to FB');
+        FB.api(`${pageId}?fields=access_token&access_token=${userToken}`, function(pageResp) {
+          console.log(pageResp);
+        });
+        FB.api('/me', {fields: 'id,name,email'}, function(response) {
+          console.log(response);
+        });
+      }*/
     });
   };
 
@@ -39,11 +72,6 @@ function created() {
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));
   /* eslint-enable */
-  console.log('hello world');
-  const me = {
-    uuid: 'createdUuid',
-  }; // fb id
-  store.commit('setMe', { me });
 }
 
 /* eslint-disable no-new */

@@ -1,7 +1,7 @@
 <template>
   <div class="chat-container">
     <div class="heading">
-      <h1>{{ title + uuid }}</h1>
+      <h1>{{ title }} [{{ '' + uuid }}]</h1>
     </div>
     <div class="body">
       <div class="box left-box">
@@ -31,7 +31,7 @@ export default {
   },
   data() {
     return {
-      title: 'PubNub ChatEngine and Vue - User: ',
+      title: 'Mix Messengers',
     };
   },
   computed: {

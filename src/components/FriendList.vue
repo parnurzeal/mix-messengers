@@ -1,21 +1,43 @@
 <template>
   <div class="friend-list">
     friend-list
+    <friend-list-item
+      v-for="(conversation, index) of getDigestedList"
+                      :name="conversation.displayParticipants"
+                      :id="conversation.id"
+                      >
+    </friend-list-item>
   </div>
 </template>
 
 
 <script>
 import { mapGetters } from 'vuex';
-
+import FriendListItem from '@/components/FriendListItem';
+  
 export default {
   name: 'friend-list',
+  components: {
+    FriendListItem,
+  },
   data() {
     return {
     };
   },
   computed: {
+    getDigestedList: function() {
+      if (!this.conversations.data) return [];
+      const digestedList = 
+            this.conversations.data.map(elem => {
+        const participantNames = elem.participants.data.map(person => person.name);
+        elem.displayParticipants = participantNames.join(',');
+        return elem;
+      });
+      console.log(digestedList);
+      return digestedList;
+    },
     ...mapGetters({
+      conversations: 'getConversations',
     }),
   },
 };

@@ -1,5 +1,7 @@
 <template>
   <div class="friend-list-item">
+    <span class="id">ID: {{ id }}</span>
+    <span class="name">People: {{ name }}</span>
   </div>
 </template>
 
@@ -9,6 +11,10 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'friend-list-item',
+  props: {
+    name: {},
+    id: {},
+  },
   data() {
     return {
     };
