@@ -1,6 +1,6 @@
 <template>
   <div class="friend-list">
-    friend-list
+    Thread list
     <friend-list-item
       v-for="(conversation, index) of getDigestedList"
                       :name="conversation.displayParticipants"
@@ -44,7 +44,7 @@ export default {
 </script>
 <style scoped>
 .friend-list {
-  background-color: violet;
+  background-color: white;
 }
 /*.friend-list {
   position: relative;

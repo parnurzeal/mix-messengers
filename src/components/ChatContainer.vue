@@ -1,7 +1,9 @@
 <template>
   <div class="chat-container">
     <div class="heading">
-      <h1>{{ title }} [{{ '' + uuid }}]</h1>
+      <h1>{{ title }}
+        <br/>[{{ 'FB:' + fbId }}]
+      </h1>
     </div>
     <div class="body">
       <div class="box left-box">
@@ -36,7 +38,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      uuid: 'getMyUuid',
+      fbId: 'getFbPageId',
     }),
   },
 };
@@ -71,10 +73,12 @@ export default {
 
 .left-box {
   width: 20%;
-  background-color: darkgrey;
+  background-color: white;
+  border: solid 1px;
 }
 
 .right-box {
-  background-color: lightgrey;
+  background-color: white;
+  border: solid 1px;
 }
 </style>

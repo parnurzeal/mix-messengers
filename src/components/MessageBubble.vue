@@ -1,5 +1,8 @@
 <template>
   <div class="message-bubble">
+    <span>{{ from }}</span>
+    <br>
+    <span>{{ text }}</span>
   </div>
 </template>
 
@@ -9,6 +12,7 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'message-bubble',
+  props: ['from', 'text', 'id', 'time'],
   data() {
     return {
     };

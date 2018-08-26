@@ -39,6 +39,7 @@ function created() {
                 },
               });
               store.dispatch('getFbConversationList');
+              store.dispatch('getFbConversationLog', 't_10156437529597570');
             });
           });
         } else {
@@ -48,18 +49,6 @@ function created() {
         scope: 'public_profile,email,manage_pages,pages_show_list,read_page_mailboxes', 
         return_scopes: true
       });
-      
-      /*if (response.status === 'connected') {
-        const userToken = response.authResponse.accessToken;
-        console.log(`userToken: ${userToken}`);
-        console.log('Connected to FB');
-        FB.api(`${pageId}?fields=access_token&access_token=${userToken}`, function(pageResp) {
-          console.log(pageResp);
-        });
-        FB.api('/me', {fields: 'id,name,email'}, function(response) {
-          console.log(response);
-        });
-      }*/
     });
   };
 

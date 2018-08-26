@@ -1,5 +1,7 @@
 <template>
-  <div class="friend-list-item">
+  <div 
+       class="friend-list-item"
+       v-on:click="onFocus">
     <span class="id">ID: {{ id }}</span>
     <span class="name">People: {{ name }}</span>
   </div>
@@ -8,7 +10,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-
+import { mapActions } from 'vuex';
+  
 export default {
   name: 'friend-list-item',
   props: {
@@ -19,10 +22,24 @@ export default {
     return {
     };
   },
+  methods: {
+    onFocus(event) {
+      console.log('thread id:', this.id);
+      this.getFbConversationLog(this.id);
+    },
+    ...mapActions([
+      'getFbConversationLog',
+      ]),
+  },
   computed: {
     ...mapGetters({
     }),
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.friend-list-item {
+  border: solid 1px;  
+}
+
+</style>
