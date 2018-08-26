@@ -1,6 +1,6 @@
 <template>
   <div class="message-bubble">
-    <span>{{ from }}</span>
+    <span>{{ from }} - {{ time }}</span>
     <br>
     <span>{{ text }}</span>
   </div>

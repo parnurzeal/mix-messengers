@@ -12,7 +12,7 @@ const state = {
     }
   },
   messages: {test:'hello'},
-  currentChat: '',
+  currentChatId: '',
   conversations: {},
   friends: [],
   me: {
@@ -29,14 +29,18 @@ const mutations = {
     state.me = payload.me;
     console.log(state.me);
   },
+  setCurrentChatId(state, payload) {
+    state.currentChatId = payload.id;
+  },
 };
 
 const actions = {
   getFbConversationList({ commit, state }) {
-    const savedConversations = [...state.conversations];
-    const pageId = state.global.fb.pageId;
-    const accessToken = state.me.fb.pageToken;
-    FB.api(
+    return new Promise((resolve, reject) => {
+      const savedConversations = [...state.conversations];
+      const pageId = state.global.fb.pageId;
+      const accessToken = state.me.fb.pageToken;
+      FB.api(
       `/${pageId}`,
         'GET',
         {
@@ -45,9 +49,10 @@ const actions = {
         },
         function(response) {
           state.conversations = response.conversations;
-          
+          resolve();
         }
-    );
+      );
+    });
   },
   getFbConversationLog({ commit, state }, conversationId) {
     const accessToken = state.me.fb.pageToken;
@@ -62,6 +67,24 @@ const actions = {
         state.messages = response.messages;
       });
   },
+  sendFbMessage({ dispatch, commit, state }, {conversationId, text}) {
+    const accessToken = state.me.fb.pageToken;
+    console.log('Sending Message:', conversationId, text);
+    FB.api(
+      `/${conversationId}/messages`,
+      'POST',
+      {
+        message: text,
+        access_token: accessToken,
+      },
+      function (response) {
+        console.log(response);
+        if (response && !response.error) {
+          dispatch('getFbConversationLog', conversationId);
+        }
+      }
+    );
+  },
 };
 
 const getters = {
@@ -70,6 +93,14 @@ const getters = {
   getFbPageId: state => state.global.fb.pageId,
   getConversations: state => state.conversations,
   getConversationParticipants: state => state.conversations,
+  getOnlyMessages: state => {
+    if (!state.messages.data) return [];
+    const newone = state.messages.data.sort(function(a,b) {
+      return Date.parse(a.created_time) - Date.parse(b.created_time);
+    });
+    console.log(newone);
+    return newone;
+  },
 };
 
 export default new Vuex.Store({

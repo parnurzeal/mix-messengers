@@ -46,13 +46,13 @@ export default {
 <style scoped>
 .chat-container {
   display: table;
-  max-width: 750px;
+  max-width: 700px;
   min-width: 300px;
   width: 100%;
   height: 550px;
   margin: auto;
   background-color: #FFFFFF;
-  border: solid 1px #BFBFBF;
+  border: solid 1px;
   border-radius: 3px;
 }
 

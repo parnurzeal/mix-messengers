@@ -3,18 +3,12 @@
     chat-log
     <div>
       <message-bubble
-        v-for="message in messages.data"
+        v-for="message in this.getOnlyMessages"
         :id="message.id"
         :time="message.created_time"
         :text="message.message"
         :from="message.from.name"
-                      >
-      </message-bubble>  
-    </div>
-  
-    
-    <div>
-      {{messages}}
+      ></message-bubble>  
     </div>
   </div>
 </template>
@@ -23,6 +17,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import MessageBubble from '@/components/MessageBubble';
   
 export default {
@@ -34,26 +29,18 @@ export default {
     return {
     };
   },
+  methods: {
+    ...mapActions([
+      'getFbConversationLog',
+    ]),
+  },
   computed: {
-    getOnlyMessages: function() {
-      if (!this.messages.data) return [];
-      const digestedList = this.messages.data.map(elem => { 
-        
-      });
-      const digestedList2 = 
-            this.conversations.data.map(elem => {
-        const participantNames = elem.participants.data.map(person => person.name);
-        elem.displayParticipants = participantNames.join(',');
-        return elem;
-      });
-      console.log(digestedList);
-      return digestedList;
-    },
     ...mapState({
       messages: state => state.messages,
     }),
-    ...mapGetters({
-    }),
+    ...mapGetters([
+      'getOnlyMessages', 
+    ]),
   },
 };
 </script>

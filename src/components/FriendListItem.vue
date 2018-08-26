@@ -11,6 +11,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { mapActions } from 'vuex';
+import { mapMutations } from 'vuex';
   
 export default {
   name: 'friend-list-item',
@@ -26,9 +27,15 @@ export default {
     onFocus(event) {
       console.log('thread id:', this.id);
       this.getFbConversationLog(this.id);
+      this.setCurrentChatId({
+        id: this.id
+      });
     },
     ...mapActions([
       'getFbConversationLog',
+      ]),
+    ...mapMutations([
+      'setCurrentChatId',
       ]),
   },
   computed: {

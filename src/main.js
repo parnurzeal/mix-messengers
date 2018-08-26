@@ -38,15 +38,21 @@ function created() {
                   }
                 },
               });
-              store.dispatch('getFbConversationList');
-              store.dispatch('getFbConversationLog', 't_10156437529597570');
+              store.dispatch('getFbConversationList').then(() => {
+                if (store.state.conversations.data.length > 0) {
+                  // Choose the first conversation to show up in ChatLog window.
+                  const chatId = store.state.conversations.data[0].id;
+                  store.dispatch('getFbConversationLog', chatId);
+                  store.commit('setCurrentChatId', { id: chatId });
+                }
+              });
             });
           });
         } else {
           console.log('User cancelled login or did not fully authorize.');
         }
       }, {
-        scope: 'public_profile,email,manage_pages,pages_show_list,read_page_mailboxes', 
+        scope: 'public_profile,email,manage_pages,pages_show_list,read_page_mailboxes,pages_messaging', 
         return_scopes: true
       });
     });
