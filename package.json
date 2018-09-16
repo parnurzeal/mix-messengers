@@ -16,6 +16,7 @@
   "dependencies": {
     "chat-engine": "^0.9.18",
     "chat-engine-typing-indicator": "0.0.9",
+    "firebase": "^5.5.0",
     "vue": "^2.5.2",
     "vue-chat-engine": "0.0.5",
     "vue-router": "^3.0.1",

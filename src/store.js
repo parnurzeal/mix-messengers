@@ -2,6 +2,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+const firebase = require('./firebaseConfig.js');
+
 Vue.use(Vuex);
 
 const state = {
@@ -9,7 +11,9 @@ const state = {
     fb: {
       appId:'266788757017683',
       pageId:'602939823441479',
-    }
+    },
+    line: {
+    },
   },
   messages: {test:'hello'},
   currentChatId: '',
@@ -35,6 +39,16 @@ const mutations = {
 };
 
 const actions = {
+  getLineConversationList({ commit, state }) {
+    console.log('hello line list');
+    return firebase.db.collection('line').get().then(list => {
+      console.log('result list', list);
+      list.forEach((doc) => {
+        console.log(`${doc.id} => ${doc.data()}`);
+      });
+      return list;
+    });
+  },
   getFbConversationList({ commit, state }) {
     return new Promise((resolve, reject) => {
       const savedConversations = [...state.conversations];

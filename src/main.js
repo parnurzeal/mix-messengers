@@ -20,7 +20,7 @@ function created() {
       version: 'v3.1',
     });
     FB.getLoginStatus(function(response) {
-      
+
       FB.login(function(response) {
         console.log(response);
         if (response.authResponse) {
@@ -30,13 +30,15 @@ function created() {
             const userToken = response.authResponse.accessToken;
             FB.api(`${pageId}?fields=access_token&access_token=${userToken}`, function(pageResp) {
               const pageToken = pageResp.access_token;
-              store.commit('setMe', { 
+              store.commit('setMe', {
                 me: {
                   fb: {
                     userToken,
                     pageToken,
                   }
                 },
+              });
+              store.dispatch('getLineConversationList').then(() => {
               });
               store.dispatch('getFbConversationList').then(() => {
                 if (store.state.conversations.data.length > 0) {
@@ -52,7 +54,7 @@ function created() {
           console.log('User cancelled login or did not fully authorize.');
         }
       }, {
-        scope: 'public_profile,email,manage_pages,pages_show_list,read_page_mailboxes,pages_messaging', 
+        scope: 'public_profile,email,manage_pages,pages_show_list,read_page_mailboxes,pages_messaging',
         return_scopes: true
       });
     });
