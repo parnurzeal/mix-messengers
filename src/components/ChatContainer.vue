@@ -9,6 +9,9 @@
       <div class="box left-box">
         <friend-list></friend-list>
       </div>
+      <div class="box left-box">
+        <line-friend-list></line-friend-list>   
+      </div>
       <div class="box right-box">
           <chat-log></chat-log>
           <message-input></message-input>
@@ -21,12 +24,14 @@
 <script>
 import { mapGetters } from 'vuex';
 import FriendList from '@/components/FriendList';
+import LineFriendList from '@/components/LineFriendList';
 import ChatLog from '@/components/ChatLog';
 import MessageInput from '@/components/MessageInput';
 
 export default {
   name: 'chat-container',
   components: {
+    LineFriendList,
     FriendList,
     ChatLog,
     MessageInput,

@@ -1,24 +1,24 @@
 <template>
-  <div class="friend-list">
-    Fb friend list
-    <friend-list-item
+  <div class="line-friend-list">
+    Line friend list
+    <line-friend-list-item
       v-for="(conversation, index) of getDigestedList"
                       :name="conversation.displayParticipants"
                       :id="conversation.id"
                       >
-    </friend-list-item>
+    </line-friend-list-item>
   </div>
 </template>
 
 
 <script>
 import { mapGetters } from 'vuex';
-import FriendListItem from '@/components/FriendListItem';
+import LineFriendListItem from '@/components/LineFriendListItem';
   
 export default {
-  name: 'friend-list',
+  name: 'line-friend-list',
   components: {
-    FriendListItem,
+    LineFriendListItem,
   },
   data() {
     return {
@@ -26,25 +26,26 @@ export default {
   },
   computed: {
     getDigestedList: function() {
-      if (!this.conversations.data) return [];
-      const digestedList = 
+      if (!this.conversations) return [];
+      /*const digestedList = 
             this.conversations.data.map(elem => {
         const participantNames = elem.participants.data.map(person => person.name);
         elem.displayParticipants = participantNames.join(',');
         return elem;
       });
-      console.log(digestedList);
+      console.log(digestedList);*/
+      const digestedList =  this.conversations;
       return digestedList;
     },
     ...mapGetters({
-      conversations: 'getConversations',
+      conversations: 'getLineConversations',
     }),
   },
 };
 </script>
 <style scoped>
-.friend-list {
-  background-color: lightblue;
+.line-friend-list {
+  background-color: lightgreen;
 }
 /*.friend-list {
   position: relative;

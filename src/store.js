@@ -18,6 +18,7 @@ const state = {
   messages: {test:'hello'},
   currentChatId: '',
   conversations: {},
+  lineConversations: {},
   friends: [],
   me: {
     uuid: 'default_uuid',
@@ -41,12 +42,13 @@ const mutations = {
 const actions = {
   getLineConversationList({ commit, state }) {
     console.log('hello line list');
-    return firebase.db.collection('line').get().then(list => {
-      console.log('result list', list);
-      list.forEach((doc) => {
-        console.log(`${doc.id} => ${doc.data()}`);
+    return firebase.db.collection('line').get().then(querySnapshot => {
+      const list = [];
+      querySnapshot.forEach((doc) => {
+        list.push({id: doc.id});
       });
-      return list;
+      state.lineConversations = list;
+      return;
     });
   },
   getFbConversationList({ commit, state }) {
@@ -81,6 +83,27 @@ const actions = {
         state.messages = response.messages;
       });
   },
+  getLineConversationLog({ commit, state }, conversationId) {
+    firebase.db.collection('line').doc(conversationId).collection('lineMessages').get().then(querySnapshot => {
+      const list = [];
+      querySnapshot.forEach((doc) => {
+        const content = doc.data();
+        list.push({
+          id: content.message.id,
+          message: content.message.text,
+          created_time: content.timestamp,
+          from: {
+            id: content.source.userId,
+            email: 'none',
+            name: 'none',
+          },
+        });
+        console.log(doc.data());
+      });
+      state.messages = {data: list};
+      return;
+    });
+  },
   sendFbMessage({ dispatch, commit, state }, {conversationId, text}) {
     const accessToken = state.me.fb.pageToken;
     console.log('Sending Message:', conversationId, text);
@@ -106,6 +129,7 @@ const getters = {
   getFriends: state => state.friends,
   getFbPageId: state => state.global.fb.pageId,
   getConversations: state => state.conversations,
+  getLineConversations: state => state.lineConversations,
   getConversationParticipants: state => state.conversations,
   getOnlyMessages: state => {
     if (!state.messages.data) return [];
