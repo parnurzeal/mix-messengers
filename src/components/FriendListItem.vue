@@ -28,7 +28,7 @@ export default {
       console.log('thread id:', this.id);
       this.getFbConversationLog(this.id);
       this.setCurrentChatId({
-        id: this.id
+        fb: this.id
       });
     },
     ...mapActions([

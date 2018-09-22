@@ -1,6 +1,7 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
 import Vue from 'vue';
 import Vuex from 'vuex';
+import axios from 'axios';
 
 const firebase = require('./firebaseConfig.js');
 
@@ -9,14 +10,14 @@ Vue.use(Vuex);
 const state = {
   global: {
     fb: {
-      appId:'266788757017683',
-      pageId:'602939823441479',
+      appId:'',
+      pageId:'',
     },
     line: {
     },
   },
   messages: {test:'hello'},
-  currentChatId: '',
+  currentChatId: {},
   conversations: {},
   lineConversations: {},
   friends: [],
@@ -35,7 +36,7 @@ const mutations = {
     console.log(state.me);
   },
   setCurrentChatId(state, payload) {
-    state.currentChatId = payload.id;
+    state.currentChatId = payload;
   },
 };
 
@@ -121,6 +122,19 @@ const actions = {
         }
       }
     );
+  },
+  sendLineMessage({ dispatch, commit, state }, {conversationId, text}) {
+    console.log('Sending Message:', conversationId, text);
+    axios.post(`https://us-central1-a-dev-env.cloudfunctions.net/webhook/send_line_msg`, {
+        to: conversationId,
+        messages: [{
+          type: 'text',
+          text,
+        }],
+    }).then(response => {
+      console.log('successfully send msg to LINE');
+      console.log(response);
+    });
   },
 };
 

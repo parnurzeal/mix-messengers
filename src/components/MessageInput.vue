@@ -22,15 +22,24 @@ export default {
     submitMessage(event) {
       const text = event.target.value;
       console.log(this.currentChatId);
-      this.sendFbMessage({
-        conversationId: this.currentChatId, 
-        text
-      });
+      if (this.currentChatId.fb) {
+        this.sendFbMessage({
+          conversationId: this.currentChatId.fb, 
+          text
+        });
+      } else if (this.currentChatId.line) {
+        this.sendLineMessage({
+          conversationId: this.currentChatId.line, 
+          text
+        });
+      }
+
       // Empty msg input;
       event.target.value = '';
     },
     ...mapActions([
       'sendFbMessage',
+      'sendLineMessage',
     ]),
   },
   computed: {

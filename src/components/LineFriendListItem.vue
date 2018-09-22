@@ -28,7 +28,7 @@ export default {
       console.log('thread id:', this.id);
       this.getLineConversationLog(this.id);
       this.setCurrentChatId({
-        id: this.id
+        line: this.id
       });
     },
     ...mapActions([
